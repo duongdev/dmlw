@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 
 import LearnContainer from '~/components/learn-container'
-import { course as courseData } from '~/data-base'
+import { course as courseData } from '~/data/data.server'
 import { superjson, useSuperLoaderData } from '~/utils/data'
 
 export async function loader() {

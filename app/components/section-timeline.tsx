@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import { useMemo } from 'react'
 
 import { Box, Group, Text, Timeline } from '@mantine/core'
 import { Link } from '@remix-run/react'
@@ -11,6 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { format } from 'date-fns'
 
+import type { CourseUnit } from '~/data/data.server'
 import type { Icon } from '~/utils/types'
 
 const BULLET_SIZE = 36
@@ -24,31 +26,44 @@ export type SectionTimelineItemProps = {
   isLocked?: boolean
 }
 
+// eslint-disable-next-line no-unused-vars
+export type BuildUnitPath = (props: { unitId: string }) => string
+
 export type SectionTimelineProps = {
-  items: SectionTimelineItemProps[]
+  units: CourseUnit[]
+  buildPath: BuildUnitPath
+  // eslint-disable-next-line no-unused-vars
+  isUnitActive?: (unitId: CourseUnit) => boolean
 }
 
-const ITEM_TYPE_ICON: Partial<Record<SectionTimelineItemProps['type'], Icon>> =
-  {
-    video: IconPlayerPlayFilled,
-    text: IconBook,
-    challenge: IconCode,
-    project: IconBrain,
-  }
+const ITEM_TYPE_ICON: Partial<Record<CourseUnit['type'], Icon>> = {
+  video: IconPlayerPlayFilled,
+  text: IconBook,
+  challenge: IconCode,
+  project: IconBrain,
+}
 
-const SectionTimeline: FC<SectionTimelineProps> = ({ items }) => {
+const SectionTimeline: FC<SectionTimelineProps> = ({
+  units,
+  buildPath,
+  isUnitActive,
+}) => {
   return (
     <Box ml="0.5rem">
       <Timeline active={0}>
-        {items.map((item) => {
-          const ItemIcon = ITEM_TYPE_ICON[item.type]
+        {units.map((unit) => {
+          const ItemIcon = ITEM_TYPE_ICON[unit.type]
           return (
             <Timeline.Item
               bullet={ItemIcon && <ItemIcon size={BULLET_SIZE - 16} />}
               bulletSize={BULLET_SIZE}
-              key={item.id}
+              key={unit.id}
             >
-              <SectionTimelineItem {...item} />
+              <SectionTimelineItem
+                buildPath={buildPath}
+                courseUnit={unit}
+                isActive={isUnitActive}
+              />
             </Timeline.Item>
           )
         })}
@@ -57,35 +72,50 @@ const SectionTimeline: FC<SectionTimelineProps> = ({ items }) => {
   )
 }
 
-const SectionTimelineItem: FC<SectionTimelineItemProps> = ({
-  id,
-  title,
-  description,
-  duration,
-  isLocked,
-}) => {
+const SectionTimelineItem: FC<{
+  courseUnit: CourseUnit
+  buildPath: BuildUnitPath
+  // eslint-disable-next-line no-unused-vars
+  isActive?: (unitId: CourseUnit) => boolean
+}> = ({ courseUnit, buildPath, isActive }) => {
+  const { id, title, description, duration, isLocked } = courseUnit
+  const path = useMemo(() => {
+    if (!buildPath) return `./${id}`
+    return buildPath({ unitId: id })
+  }, [buildPath, id])
+
+  const active = useMemo(
+    () => (isActive ? isActive(courseUnit) : false),
+    [isActive, courseUnit],
+  )
+
   return (
     <Box
       component={Link}
       sx={{ color: 'unset', textDecoration: 'unset' }}
-      to={`./learn/section-1/${id}`}
+      to={path}
     >
       <Box
         sx={{
           marginLeft: '0.5rem',
           position: 'relative',
-          ':before': { transition: 'all 0.5s' },
+          ':before': {
+            transition: 'background-color 0.2s ease',
+            content: '""',
+            position: 'absolute',
+            top: '-0.5rem',
+            left: '-0.5rem',
+            right: '-0.5rem',
+            bottom: '-0.5rem',
+            borderRadius: '1rem',
+            zIndex: -1,
+            ...(active && {
+              backgroundColor: `#fa525224 !important`,
+            }),
+          },
           '&:hover': {
             ':before': {
-              content: '""',
-              position: 'absolute',
-              top: '-0.5rem',
-              left: '-0.5rem',
-              right: '-0.5rem',
-              bottom: '-0.5rem',
-              backgroundColor: 'rgba(0, 0, 0, 0.015)',
-              borderRadius: '1rem',
-              zIndex: -1,
+              backgroundColor: 'rgba(0, 0, 0, 0.035)',
             },
           },
         }}

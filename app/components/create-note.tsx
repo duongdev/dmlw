@@ -14,10 +14,12 @@ const CreateNote: FC<CreateNoteProps> = () => {
     <Stack spacing="sm">
       <Textarea autoFocus placeholder="Jot something down..." />
       <Group position="apart">
-        <Text size="sm">
-          <strong>Timestamp:</strong> {fDuration(videoTimestamp)}
-        </Text>
         <Button>Add note</Button>
+        {videoTimestamp && (
+          <Text size="sm">
+            <strong>Timestamp:</strong> {fDuration(videoTimestamp)}
+          </Text>
+        )}
       </Group>
     </Stack>
   )
