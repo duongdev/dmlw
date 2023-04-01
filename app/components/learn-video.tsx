@@ -21,7 +21,7 @@ const LearnVideo: FC<LearnVideoProps> = ({ source }) => {
   )
 
   return (
-    <AspectRatio mah="50vh" ratio={16 / 9} sx={{ backgroundColor: '#000' }}>
+    <AspectRatio mah="80vh" ratio={16 / 9} sx={{ backgroundColor: '#000' }}>
       <ReactPlayer
         controls
         height="100%"

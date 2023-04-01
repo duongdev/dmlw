@@ -1,22 +1,37 @@
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 import { useMemo } from 'react'
 
-import { Tabs } from '@mantine/core'
-import {
-  useLocation,
-  useMatches,
-  useNavigate,
-} from '@remix-run/react'
+import { Box, Group, Tabs } from '@mantine/core'
+import { useLocation, useMatches, useNavigate } from '@remix-run/react'
 
 export type SidebarTabsProps = {
   children?: React.ReactNode
 }
 
-const TABS: { value: string; label: string }[] = [
+const dot = (
+  <Box
+    sx={{
+      height: '0.375rem',
+      width: '0.375rem',
+      borderRadius: '50%',
+      backgroundColor: 'red',
+    }}
+  />
+)
+
+const TABS: { value: string; label: ReactNode }[] = [
   { label: 'Content', value: '.' },
   { label: 'Discussion', value: 'discussion' },
   { label: 'Notebook', value: 'notebook' },
-  { label: 'Ask CoderSchool', value: 'assistant' },
+  {
+    label: (
+      <Group spacing="xs">
+        Ask assistant
+        {dot}
+      </Group>
+    ),
+    value: 'assistant',
+  },
 ]
 
 const SidebarTabs: FC<SidebarTabsProps> = ({ children }) => {

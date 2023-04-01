@@ -4,12 +4,16 @@ import { ActionIcon, Box, Container, Group, Title } from '@mantine/core'
 import { Link, Outlet } from '@remix-run/react'
 import { IconX } from '@tabler/icons-react'
 
+import type { Course } from '~/data-base'
+
 import LearnVideo from './learn-video'
 import SidebarTabs from './sidebar-tabs'
 
-export type LearnProviderProps = {}
+export type LearnContainerProps = {
+  course: Course
+}
 
-const LearnProvider: FC<LearnProviderProps> = () => {
+const LearnContainer: FC<LearnContainerProps> = () => {
   return (
     <Box sx={{ height: '100vh', display: 'flex', overflow: 'hidden' }}>
       <Box
@@ -32,6 +36,7 @@ const LearnProvider: FC<LearnProviderProps> = () => {
       <Box
         sx={{
           width: '50%',
+          maxWidth: 720,
           borderLeft: `solid 1px #dee2e6`,
         }}
       >
@@ -43,4 +48,4 @@ const LearnProvider: FC<LearnProviderProps> = () => {
   )
 }
 
-export default LearnProvider
+export default LearnContainer
