@@ -1,16 +1,19 @@
 import type { FC } from 'react'
 
 import { Box } from '@mantine/core'
+import type { LoaderArgs } from '@remix-run/node'
 import { useParams } from '@remix-run/react'
 
+import { getCourseSections } from '~/api/course.server'
 import CourseOutlines from '~/components/course-outlines'
-import { course as courseData } from '~/data/data.server'
 import { superjson, useSuperLoaderData } from '~/utils/data'
 
-export async function loader() {
-  const sections = courseData.sections
+export async function loader({ params }: LoaderArgs) {
+  const { courseId } = params
 
-  return superjson({ sections, course: courseData })
+  const sections = await getCourseSections(courseId!)
+
+  return superjson({ sections })
 }
 
 export type ContentProps = {}

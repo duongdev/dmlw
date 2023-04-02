@@ -1,8 +1,19 @@
 /* eslint-disable react/prop-types */
-import { Container, Paper, Text, Title } from '@mantine/core'
+import {
+  Box,
+  Center,
+  Container,
+  Image,
+  Paper,
+  Text,
+  Title,
+} from '@mantine/core'
 import type { MDXContentProps } from 'mdx-bundler/client'
 
-import LearnVideo from '../learn-video'
+import LearnVideo from '../../learn-video'
+
+import Note from './note'
+import TerminalBlock from './terminal-block'
 
 const mdxComponents: MDXContentProps['components'] = {
   // Mantine components
@@ -10,6 +21,16 @@ const mdxComponents: MDXContentProps['components'] = {
   h2: ({ children }) => (
     <Container my="lg">
       <Title order={2}>{children}</Title>
+    </Container>
+  ),
+  h3: ({ children }) => (
+    <Container my="lg">
+      <Title order={3}>{children}</Title>
+    </Container>
+  ),
+  h4: ({ children }) => (
+    <Container my="lg">
+      <Title order={4}>{children}</Title>
     </Container>
   ),
   p: ({ children }) => (
@@ -30,14 +51,28 @@ const mdxComponents: MDXContentProps['components'] = {
       </Paper>
     </Container>
   ),
+  ul: ({ children }) => (
+    <Container mb="sm">
+      <Box component="ul" sx={{ paddingInlineStart: '2rem' }}>
+        {children}
+      </Box>
+    </Container>
+  ),
 
   // Custom components
   Video: LearnVideo,
   Intro: ({ children }) => (
-    <Text mt="xl" size="lg">
+    <Text mt="xl" size="xl">
       {children}
     </Text>
   ),
+  Image: (props: any) => (
+    <Center my="lg">
+      <Image {...props} />
+    </Center>
+  ),
+  TerminalBlock,
+  Note,
 }
 
 export default mdxComponents

@@ -1,21 +1,23 @@
 import { useCallback, useMemo } from 'react'
 
 import { Button, Container, Group } from '@mantine/core'
-import type { V2_MetaFunction } from '@remix-run/node'
+import type { LoaderArgs, V2_MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconAwardFilled, IconDisabled2 } from '@tabler/icons-react'
 
+import { getCourse } from '~/api/course.server'
 import CourseHeader from '~/components/course-header'
 import CourseOutlines from '~/components/course-outlines'
-import { course as courseData } from '~/data/data.server'
 import { superjson, useSuperLoaderData } from '~/utils/data'
 
 export const meta: V2_MetaFunction = ({ data }) => {
   return [{ title: data?.course?.title ?? 'DMLW by Dustin' }]
 }
 
-export async function loader() {
-  return superjson({ course: courseData })
+export async function loader({ params }: LoaderArgs) {
+  const { courseId } = params
+  const course = await getCourse(courseId!)
+  return superjson({ course })
 }
 
 export default function Index() {
@@ -23,13 +25,15 @@ export default function Index() {
 
   const buildUnitPath = useCallback(
     ({ sectionId, unitId }: { sectionId: string; unitId: string }) =>
-      `/courses/${course.id}/learn/${sectionId}/${unitId}`,
-    [course.id],
+      `/courses/${course?.id}/learn/${sectionId}/${unitId}`,
+    [course?.id],
   )
 
   const action = useMemo(() => {
-    const firstSection = course.sections[0]
-    const firstUnit = firstSection.units[0]
+    const firstSection = course?.sections[0]
+    const firstUnit = firstSection?.units[0]
+
+    if (!(firstSection && firstUnit)) return null
 
     return (
       <Group>
@@ -40,10 +44,14 @@ export default function Index() {
         >
           Learn now
         </Button>
-        <Button color="yellow" leftIcon={<IconAwardFilled />} variant="outline">Claim your certificate</Button>
+        <Button color="yellow" leftIcon={<IconAwardFilled />} variant="outline">
+          Claim your certificate
+        </Button>
       </Group>
     )
-  }, [course.sections])
+  }, [course?.sections])
+
+  if (!course) return 'Course not found. Please try again later.'
 
   return (
     <>

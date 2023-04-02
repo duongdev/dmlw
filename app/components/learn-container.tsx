@@ -5,11 +5,12 @@ import { ActionIcon, Box, Container, Group, Text, Title } from '@mantine/core'
 import { Link, Outlet, useParams } from '@remix-run/react'
 import { IconX } from '@tabler/icons-react'
 
-import type { Course } from '~/data/data.server'
+import type { Course } from '~/api/course.server'
 import type { MDXOutput } from '~/utils/mdx'
 
 import MdxComponent from './mdx/mdx-component'
 import SidebarTabs from './sidebar-tabs'
+import ThemeToggler from './theme-toggler'
 
 export type LearnContainerProps = {
   course: Course
@@ -69,7 +70,10 @@ const LearnContainer: FC<LearnContainerProps> = ({ course, mdx }) => {
               <ActionIcon component={Link} to="/">
                 <IconX />
               </ActionIcon>
-              <Title order={4}>{title}</Title>
+              <Title order={4} sx={{ flex: 1 }}>
+                {title}
+              </Title>
+              <ThemeToggler />
             </Group>
           </Container>
         </Box>

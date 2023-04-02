@@ -7,12 +7,10 @@ import {
   IconBook,
   IconBrain,
   IconCode,
-  IconLock,
   IconPlayerPlayFilled,
 } from '@tabler/icons-react'
-import { format } from 'date-fns'
 
-import type { CourseUnit } from '~/data/data.server'
+import type { CourseUnit, CourseUnitType } from '~/api/course.server'
 import type { Icon } from '~/utils/types'
 
 const BULLET_SIZE = 36
@@ -21,8 +19,8 @@ export type SectionTimelineItemProps = {
   id: string
   title: string
   description?: string
-  type: 'text' | 'video' | 'challenge' | 'project'
-  duration?: number
+  type: CourseUnitType
+  duration?: string
   isLocked?: boolean
 }
 
@@ -36,7 +34,7 @@ export type SectionTimelineProps = {
   isUnitActive?: (unitId: CourseUnit) => boolean
 }
 
-const ITEM_TYPE_ICON: Partial<Record<CourseUnit['type'], Icon>> = {
+const ITEM_TYPE_ICON: Partial<Record<CourseUnitType, Icon>> = {
   video: IconPlayerPlayFilled,
   text: IconBook,
   challenge: IconCode,
@@ -52,7 +50,7 @@ const SectionTimeline: FC<SectionTimelineProps> = ({
     <Box ml="0.5rem">
       <Timeline active={0}>
         {units.map((unit) => {
-          const ItemIcon = ITEM_TYPE_ICON[unit.type]
+          const ItemIcon = ITEM_TYPE_ICON[unit.type || 'text']
           return (
             <Timeline.Item
               bullet={ItemIcon && <ItemIcon size={BULLET_SIZE - 16} />}
@@ -78,7 +76,7 @@ const SectionTimelineItem: FC<{
   // eslint-disable-next-line no-unused-vars
   isActive?: (unitId: CourseUnit) => boolean
 }> = ({ courseUnit, buildPath, isActive }) => {
-  const { id, title, description, duration, isLocked } = courseUnit
+  const { id, title, description, duration } = courseUnit
   const path = useMemo(() => {
     if (!buildPath) return `./${id}`
     return buildPath({ unitId: id })
@@ -124,12 +122,7 @@ const SectionTimelineItem: FC<{
           <Box>
             <Group spacing="xs">
               <Text size="lg">{title}</Text>
-              {!!duration && (
-                <Text color="dimmed">{format(duration * 1000, 'mm:ss')}</Text>
-              )}
-              {!!isLocked && (
-                <Box component={IconLock} opacity={0.5} size="1.2rem" />
-              )}
+              {!!duration && <Text color="dimmed">{duration}</Text>}
             </Group>
             <Text color="dimmed">{description}</Text>
           </Box>

@@ -2,19 +2,23 @@ import type { FC } from 'react'
 
 import type { LoaderArgs } from '@remix-run/node'
 
+import { getCourse } from '~/api/course.server'
 import LearnContainer from '~/components/learn-container'
-import { course as courseData } from '~/data/data.server'
-import { superjson, useSuperLoaderData } from '~/utils/data'
-import { getMDXContent } from '~/utils/mdx'
+import { redirect, superjson, useSuperLoaderData } from '~/utils/data'
 
 export async function loader({ params }: LoaderArgs) {
-  const { courseId, sectionId, unitId } = params
+  const { courseId, unitId } = params
 
-  const mdxPath = `${courseId}/${sectionId}/${unitId}`
+  const course = await getCourse(courseId!)
+  if (!course) {
+    return redirect('/')
+  }
 
-  const mdx = await getMDXContent(mdxPath)
+  const unit = course?.sections
+    .flatMap((section) => section.units)
+    .find((unit) => unit.id === unitId)
 
-  return superjson({ course: courseData, mdx })
+  return superjson({ course, mdx: unit?.mdx })
 }
 
 export type LearnViewProps = {}

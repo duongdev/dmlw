@@ -1,4 +1,7 @@
-import { MantineProvider } from '@mantine/core'
+import { useState } from 'react'
+
+import type { ColorScheme } from '@mantine/core'
+import { ColorSchemeProvider, MantineProvider } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type { LinksFunction, V2_MetaFunction } from '@remix-run/node'
 import {
@@ -49,19 +52,27 @@ export const links: LinksFunction = () => {
 }
 
 export default function App() {
+  const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      emotionCache={emotionCache}
-      theme={theme}
+    <ColorSchemeProvider
+      colorScheme={colorScheme}
+      toggleColorScheme={toggleColorScheme}
     >
-      <StylesPlaceholder />
-      <Head />
-      <Outlet />
-      <ScrollRestoration />
-      <Scripts />
-      <LiveReload />
-    </MantineProvider>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        emotionCache={emotionCache}
+        theme={{ ...theme, colorScheme }}
+      >
+        <StylesPlaceholder />
+        <Head />
+        <Outlet />
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </MantineProvider>
+    </ColorSchemeProvider>
   )
 }

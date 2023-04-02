@@ -2,7 +2,8 @@ import type { FC } from 'react'
 
 import { Stack, Title } from '@mantine/core'
 
-import type { CourseSection, CourseUnit } from '~/data/data.server'
+
+import type { CourseSection, CourseUnit } from '~/api/course.server'
 
 import SectionTimeline from './section-timeline'
 
