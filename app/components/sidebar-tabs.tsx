@@ -40,7 +40,7 @@ const SidebarTabs: FC<SidebarTabsProps> = ({ children }) => {
   const matches = useMatches()
 
   const handleTabChange = (value: string) => {
-    navigate(`./view/${value}`, { replace: true, preventScrollReset: true })
+    navigate(`./${value}`, { replace: true, preventScrollReset: true })
   }
 
   const value = useMemo(() => {
@@ -57,21 +57,31 @@ const SidebarTabs: FC<SidebarTabsProps> = ({ children }) => {
 
   return (
     <>
-      <Tabs
-        mt="sm"
-        onTabChange={handleTabChange}
-        radius="md"
-        value={value}
-        variant="outline"
+      <Box
+        sx={{
+          height: 'calc(3rem + 1px)',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          width: '100%',
+        }}
       >
-        <Tabs.List px="sm">
-          {TABS.map(({ label, value }) => (
-            <Tabs.Tab key={value} value={value}>
-              {label}
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-      </Tabs>
+        <Tabs
+          onTabChange={handleTabChange}
+          radius="md"
+          sx={{flex: 1}}
+          value={value}
+          variant="outline"
+        >
+          <Tabs.List px="sm">
+            {TABS.map(({ label, value }) => (
+              <Tabs.Tab key={value} value={value}>
+                {label}
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </Tabs>
+      </Box>
       {children}
     </>
   )

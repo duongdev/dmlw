@@ -1,13 +1,11 @@
 ---
-title: This is an MDX content
+title: The history
+description: The history of React
+type: video
+duration: 08:30
 ---
 
-import LearnVideo from '~/components/learn-video'
-import { Container } from '@mantine/core'
-
-<LearnVideo source="https://stream.mux.com/TbVCJiOghmISJgg4AznPfFHYRfiVoek8OJHF56Y01oR4/high.mp4" />
-
-<Container>
+<Video source="https://stream.mux.com/TbVCJiOghmISJgg4AznPfFHYRfiVoek8OJHF56Y01oR4/high.mp4" />
 
 ## React Server Components
 
@@ -16,5 +14,3 @@ In React Labs posts, we write about projects in active research and development.
 React Server Components (or RSC) is a new application architecture designed by the React team.
 
 We've first shared our research on RSC in an [introductory talk](/blog/2020/12/21/data-fetching-with-react-server-components) and an [RFC](https://github.com/reactjs/rfcs/pull/188). To recap them, we are introducing a new kind of component--Server Components--that run ahead of time and are excluded from your JavaScript bundle. Server Components can run during the build, letting you read from the filesystem or fetch static content. They can also run on the server, letting you access your data layer without having to build an API. You can pass data by props from Server Components to the interactive Client Components in the browser.
-
-</Container>
