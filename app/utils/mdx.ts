@@ -8,7 +8,7 @@ import typescript from 'highlight.js/lib/languages/typescript'
 import { readFile } from './fs.server'
 import { bundleMDX } from './mdx.server'
 
-export const CONTENTS_DIR = path.join(process.cwd(), 'contents')
+export const CONTENTS_DIR = path.join(__dirname, '../contents')
 
 export type MDXContent = {
   slug: string
