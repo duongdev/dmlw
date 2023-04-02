@@ -5,7 +5,6 @@ import {
   Box,
   Container,
   CopyButton,
-  Divider,
   Group,
   Paper,
   Text,

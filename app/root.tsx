@@ -1,7 +1,6 @@
-import { useState } from 'react'
-
 import type { ColorScheme } from '@mantine/core'
 import { ColorSchemeProvider, MantineProvider } from '@mantine/core'
+import { useLocalStorage } from '@mantine/hooks'
 import { StylesPlaceholder } from '@mantine/remix'
 import type { LinksFunction, V2_MetaFunction } from '@remix-run/node'
 import {
@@ -52,7 +51,10 @@ export const links: LinksFunction = () => {
 }
 
 export default function App() {
-  const [colorScheme, setColorScheme] = useState<ColorScheme>('light')
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'color-scheme',
+    defaultValue: 'light',
+  })
   const toggleColorScheme = (value?: ColorScheme) =>
     setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'))
   return (
