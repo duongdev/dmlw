@@ -3,6 +3,7 @@ import { useMemo , Suspense } from 'react'
 
 import type { CourseUnitContent } from '~/data/data.server'
 import mdx from '~/utils/mdx'
+// import Sample from '~/data/mdx/sample.mdx'
 
 export type MDXContentProps = {
   content: CourseUnitContent

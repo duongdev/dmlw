@@ -40,7 +40,7 @@ const SidebarTabs: FC<SidebarTabsProps> = ({ children }) => {
   const matches = useMatches()
 
   const handleTabChange = (value: string) => {
-    navigate(`./${value}`)
+    navigate(`./view/${value}`, { replace: true, preventScrollReset: true })
   }
 
   const value = useMemo(() => {

@@ -1,5 +1,5 @@
-import type { FC } from 'react'
-import { useCallback } from 'react'
+import type { FC, ReactNode} from 'react';
+import { useEffect, useState , Suspense, useCallback } from 'react'
 
 import { Box, Container, Stack } from '@mantine/core'
 
@@ -27,12 +27,24 @@ const UnitContents: FC<UnitContentsProps> = ({ contents }) => {
   }, [])
 
   return (
-    <Stack>
-      {contents.map((content) => (
-        <Box key={content.id}>{renderContent(content)}</Box>
-      ))}
-    </Stack>
+    <ClientOnly>
+      <Stack>
+        <Suspense fallback={<div>Loadinggg...</div>}>
+          {contents.map((content) => (
+            <Box key={content.id}>{renderContent(content)}</Box>
+          ))}
+        </Suspense>
+      </Stack>
+    </ClientOnly>
   )
+}
+
+function ClientOnly({ children }: { children: ReactNode }) {
+  let [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+  return mounted ? <>{children}</> : null
 }
 
 export default UnitContents
